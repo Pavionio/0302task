@@ -12,7 +12,7 @@ class MyWidget(QMainWindow):
         super().__init__()
         uic.loadUi('main.ui', self)  # Загружаем дизайн
 
-        self.refresh_map()
+        self.refresh_map(1)
 
     def keyPressEvent(self, event) -> None:
         pass
