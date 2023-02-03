@@ -17,6 +17,8 @@ class MyWidget(QMainWindow):
         self.map_l = 'map'
         self.map_zoom = 0.18712350000000022, 0.1377980000000001
         self.address_button.clicked.connect(self.show_map)
+        self.minus_button.clicked.connect(self.zoom)
+        self.plus_button.clicked.connect(self.zoom)
         self.show_map()
 
     def keyPressEvent(self, event) -> None:
@@ -28,7 +30,6 @@ class MyWidget(QMainWindow):
             "l": self.map_l,
             'spn': self.map_zoom
         }
-        print(map_params)
         session = requests.Session()
         retry = Retry(total=10, connect=5, backoff_factor=0.5)
         adapter = HTTPAdapter(max_retries=retry)
@@ -36,7 +37,6 @@ class MyWidget(QMainWindow):
         session.mount('https://', adapter)
         response = session.get('https://static-maps.yandex.ru/1.x/',
                                params=map_params)
-        print(response)
         with open('tmp.png', mode='wb') as tmp:
             tmp.write(response.content)
 
@@ -48,6 +48,16 @@ class MyWidget(QMainWindow):
     def show_map(self):
         address = self.address.text() if self.address.text() else 'Балтийск'
         self.map_ll, self.map_zoom = get_ll_span(address)
+        self.refresh_map()
+
+    def zoom(self):
+        spn1, spn2 = map(float, self.map_zoom.split(','))
+        if self.sender().text() == '-':
+            spn1, spn2 = min(spn1 + 0.01, 1), min(spn1 + 0.01, 1)
+        else:
+            spn1, spn2 = min(spn1 - 0.01, 0.01), min(spn1 - 0.01, 0.01)
+        self.map_zoom = ','.join(map(str, (spn1, spn2)))
+
         self.refresh_map()
 
 
