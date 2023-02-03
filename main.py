@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPixmap
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from geocoder import get_coordinates, get_ll_span
+from geocoder import get_ll_span
+from PyQt5 import QtCore
 
 
 class MyWidget(QMainWindow):
@@ -22,7 +23,10 @@ class MyWidget(QMainWindow):
         self.show_map()
 
     def keyPressEvent(self, event) -> None:
-        pass
+        if event.key() == QtCore.Qt.Key_PageDown:
+            self.zoom(key='-')
+        if event.key() == QtCore.Qt.Key_PageUp:
+            self.zoom(key='+')
 
     def refresh_map(self, event=None):
         map_params = {
@@ -50,14 +54,15 @@ class MyWidget(QMainWindow):
         self.map_ll, self.map_zoom = get_ll_span(address)
         self.refresh_map()
 
-    def zoom(self):
+    def zoom(self, key=None):
         spn1, spn2 = map(float, self.map_zoom.split(','))
-        if self.sender().text() == '-':
+        if key is None:
+            key = self.sender().text()
+        if key == '-':
             spn1, spn2 = min(spn1 + 0.01, 1), min(spn1 + 0.01, 1)
         else:
             spn1, spn2 = min(spn1 - 0.01, 0.01), min(spn1 - 0.01, 0.01)
         self.map_zoom = ','.join(map(str, (spn1, spn2)))
-
         self.refresh_map()
 
 
