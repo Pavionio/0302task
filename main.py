@@ -1,11 +1,12 @@
 import sys
 import requests
-from PyQt5 import uic  # Импортируем uic
+from PyQt5 import uic   # Импортируем uic
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QPixmap
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-a = 10
+
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
