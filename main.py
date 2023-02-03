@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-a = 9
+a = 10
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
