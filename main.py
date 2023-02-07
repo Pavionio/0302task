@@ -60,9 +60,9 @@ class MyWidget(QMainWindow):
         if key is None:
             key = self.sender().text()
         if key == '+':
-            self.map_zoom = min(self.map_zoom + 1, 23)
+            self.map_zoom = min(self.map_zoom + 1, 17)
         else:
-            self.map_zoom = max(self.map_zoom - 1, 1)
+            self.map_zoom = max(self.map_zoom - 1, 0)
         self.refresh_map()
 
     def mapl_changed(self, index):
