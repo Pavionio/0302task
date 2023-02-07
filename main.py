@@ -1,7 +1,7 @@
 import sys
 import os
 import requests
-from PyQt5 import uic   # Импортируем uic
+from PyQt5 import uic  # Импортируем uic
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPixmap
 from requests.adapters import HTTPAdapter
@@ -16,10 +16,12 @@ class MyWidget(QMainWindow):
         uic.loadUi('main.ui', self)  # Загружаем дизайн
         self.map_ll = 19.894477, 54.643775
         self.map_l = 'map'
-        self.map_zoom = 1
+        self.map_zoom = 10
+        self.index_to_mapl = {0: 'map', 1: 'sat', 2: 'skl'}
         self.address_button.clicked.connect(self.show_map)
         self.minus_button.clicked.connect(self.zoom)
         self.plus_button.clicked.connect(self.zoom)
+        self.mapl_combo.currentIndexChanged.connect(self.mapl_changed)
         self.show_map()
 
     def keyPressEvent(self, event) -> None:
@@ -61,6 +63,10 @@ class MyWidget(QMainWindow):
             self.map_zoom = min(self.map_zoom + 1, 23)
         else:
             self.map_zoom = max(self.map_zoom - 1, 1)
+        self.refresh_map()
+
+    def mapl_changed(self, index):
+        self.map_l = self.index_to_mapl[index]
         self.refresh_map()
 
 
